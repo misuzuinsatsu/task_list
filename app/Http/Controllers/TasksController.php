@@ -47,7 +47,14 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'content' => 'required|max:255',
+        ]);
+
+        $list = ['完了', '未達成', '作業中'];
+
         $task = new Task;
+        $task->status = $list[$request->status];
         $task->content = $request->content;
         $task->save();
 
@@ -93,9 +100,17 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request,[
+            'content' => 'required|max:255',
+
+        ]);
+
+        $list = ['完了', '未達成', '作業中'];
+
         $task = Task::find($id);
+        $task->status = $list[$request->status];
         $task->content = $request->content;
-        $message->save();
+        $task->save();
 
         return redirect('/');
     }
